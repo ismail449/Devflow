@@ -1,10 +1,9 @@
-
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.addMissingImports": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.addMissingImports": "explicit"
   },
   "prettier.tabWidth": 2,
   "prettier.useTabs": false,
@@ -14,16 +13,22 @@
   "prettier.trailingComma": "es5",
   "prettier.arrowParens": "always",
   "[json]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascriptreact]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/.vscode": true,
+    "next-env.d.ts": true
+  }
 }
