@@ -7,8 +7,7 @@ import {
 import React from "react";
 
 const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
-  console.log(props);
-  return <NextThemeProvider>{children}</NextThemeProvider>;
+  return <NextThemeProvider {...props}>{children}</NextThemeProvider>;
 };
 
 export default ThemeProvider;
