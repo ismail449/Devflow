@@ -14,3 +14,30 @@ export const getDeviconClassName = (techName: string) => {
     ? `${techMap[normalizedTechName]} colored`
     : "devicon-devicon-plain";
 };
+
+export function getTimeStamp(date: Date): string {
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+
+  const seconds = Math.floor(diff / 1000);
+
+  const intervals = {
+    year: 31536000,
+    month: 2592000,
+    week: 604800,
+    day: 86400,
+    hour: 3600,
+    minute: 60,
+    second: 1,
+  };
+
+  for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+    const value = Math.floor(seconds / secondsInUnit);
+
+    if (value >= 1) {
+      return `${value} ${unit}${value === 1 ? "" : "s"} ago`;
+    }
+  }
+
+  return "just now";
+}

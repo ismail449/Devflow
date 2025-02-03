@@ -9,7 +9,7 @@ import { Badge } from "../ui/badge";
 type Props = {
   _id: string;
   name: string;
-  questionsCount: number;
+  questionsCount?: number;
   showCount?: boolean;
   isCompact?: boolean;
 };
