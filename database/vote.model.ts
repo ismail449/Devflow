@@ -1,4 +1,4 @@
-import { model, models, Schema, Types } from "mongoose";
+import { model, models, Schema, Types, Document } from "mongoose";
 
 export interface IVote {
   type: "question" | "answer";
@@ -6,7 +6,7 @@ export interface IVote {
   id: Types.ObjectId;
   author: Types.ObjectId;
 }
-
+export type VoteDoc = IVote & Document;
 const voteSchema = new Schema<IVote>(
   {
     type: { type: String, required: true, enum: ["question", "answer"] },
