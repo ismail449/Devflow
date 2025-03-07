@@ -1,10 +1,10 @@
-import { model, models, Schema } from "mongoose";
+import { model, models, Schema, Types } from "mongoose";
 
 export interface IQuestion {
   title: string;
   content: string;
-  tags: Schema.Types.ObjectId[];
-  authorId: Schema.Types.ObjectId;
+  tags: Types.ObjectId[];
+  authorId: Types.ObjectId;
   upVotes?: number;
   downVotes?: number;
   answerCount?: number;
