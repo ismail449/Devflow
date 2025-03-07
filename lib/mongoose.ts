@@ -1,5 +1,3 @@
-import { error } from "console";
-
 import mongoose, { ConnectOptions, Mongoose } from "mongoose";
 
 const MONGOOSE_URI = process.env.MONGODB_URI;
@@ -8,25 +6,25 @@ if (!MONGOOSE_URI) {
   throw new Error("No MongoDB URI Was Found");
 }
 
-interface MongoosCache {
-  conncetion: Mongoose | null;
+interface MongooseCache {
+  connection: Mongoose | null;
   promise: Promise<Mongoose> | null;
 }
 
 declare global {
   // eslint-disable-next-line no-var
-  var mongoose: MongoosCache;
+  var mongoose: MongooseCache;
 }
 
 let cached = global.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = { conncetion: null, promise: null };
+  cached = global.mongoose = { connection: null, promise: null };
 }
 
 const dbConnect = async (): Promise<Mongoose> => {
-  if (cached.conncetion) {
-    return cached.conncetion;
+  if (cached.connection) {
+    return cached.connection;
   }
 
   if (!cached.promise) {
@@ -46,8 +44,8 @@ const dbConnect = async (): Promise<Mongoose> => {
       });
   }
 
-  cached.conncetion = await cached.promise;
-  return cached.conncetion;
+  cached.connection = await cached.promise;
+  return cached.connection;
 };
 
 export default dbConnect;
