@@ -2,10 +2,10 @@ import { model, models, Schema, Document } from "mongoose";
 
 export interface IUser {
   name: string;
-  userName: string;
+  username: string;
   email: string;
   bio?: string;
-  image: string;
+  image?: string;
   location?: string;
   portfolio?: string;
   reputation?: number;
@@ -17,7 +17,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    userName: {
+    username: {
       type: String,
       required: true,
     },
@@ -31,7 +31,6 @@ const userSchema = new Schema(
     },
     image: {
       type: String,
-      required: true,
     },
     location: {
       type: String,
@@ -47,5 +46,5 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-const User = models?.user || model<IUser>("User", userSchema);
+const User = models?.User || model<IUser>("User", userSchema);
 export default User;
