@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 
 import { RequestError, ValidationError } from "../http-errors";
@@ -18,9 +19,11 @@ const formatResponse = (
       details: errors,
     },
   };
-  return responseType === "api"
-    ? { status, body: JSON.stringify(responseContent) }
-    : { status, ...responseContent };
+  const response =
+    responseType === "api"
+      ? { status, body: JSON.stringify(responseContent) }
+      : { status, ...responseContent };
+  return NextResponse.json(response) as APIErrorResponse;
 };
 
 const handleError = (error: unknown, responseType: ResponseType = "server") => {
