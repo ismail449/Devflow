@@ -19,11 +19,9 @@ const formatResponse = (
       details: errors,
     },
   };
-  const response =
-    responseType === "api"
-      ? { status, body: JSON.stringify(responseContent) }
-      : { status, ...responseContent };
-  return NextResponse.json(response) as APIErrorResponse;
+  return responseType === "api"
+    ? (NextResponse.json(responseContent, { status }) as APIErrorResponse)
+    : { status, ...responseContent };
 };
 
 const handleError = (error: unknown, responseType: ResponseType = "server") => {
