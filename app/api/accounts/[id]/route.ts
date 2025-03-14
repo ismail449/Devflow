@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import User from "@/database/user.model";
+import Account from "@/database/account.model";
 import handleError from "@/lib/handlers/error";
 import { ValidationError, NotFoundError } from "@/lib/http-errors";
 import dbConnect from "@/lib/mongoose";
-import { UserSchema } from "@/lib/validations";
+import { AccountSchema } from "@/lib/validations";
 
-// GET api/users/[id]
+// GET api/account/[id]
 export async function GET(
   _: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -17,17 +17,17 @@ export async function GET(
       throw new ValidationError({ id: ["required"] });
     }
     await dbConnect();
-    const user = await User.findById(id);
-    if (!user) {
-      throw new NotFoundError("User");
+    const account = await Account.findById(id);
+    if (!account) {
+      throw new NotFoundError("Account");
     }
-    return NextResponse.json({ success: true, data: user }, { status: 200 });
+    return NextResponse.json({ success: true, data: account }, { status: 200 });
   } catch (error) {
     return handleError(error, "api");
   }
 }
 
-// DELETE api/users/[id]
+// DELETE api/account/[id]
 
 export async function DELETE(
   _: NextRequest,
@@ -39,17 +39,17 @@ export async function DELETE(
       throw new ValidationError({ id: ["required"] });
     }
     await dbConnect();
-    const user = await User.findByIdAndDelete(id);
-    if (!user) {
-      throw new NotFoundError("User");
+    const account = await Account.findByIdAndDelete(id);
+    if (!account) {
+      throw new NotFoundError("Account");
     }
-    return NextResponse.json({ success: true, data: user }, { status: 200 });
+    return NextResponse.json({ success: true, data: account }, { status: 200 });
   } catch (error) {
     return handleError(error, "api");
   }
 }
 
-// PUT api/users/[id]
+// PUT api/account/[id]
 
 export async function PUT(
   request: NextRequest,
@@ -63,20 +63,27 @@ export async function PUT(
       throw new ValidationError({ id: ["required"] });
     }
     const body = await request.json();
-    const validatedData = UserSchema.partial().parse(body);
+    const validatedData = AccountSchema.partial().safeParse(body);
+    if (!validatedData.success) {
+      throw new ValidationError(validatedData.error.flatten().fieldErrors);
+    }
 
     await dbConnect();
 
-    const updatedUser = await User.findByIdAndUpdate(id, validatedData, {
-      new: true,
-    });
+    const updatedAccount = await Account.findByIdAndUpdate(
+      id,
+      validatedData.data,
+      {
+        new: true,
+      }
+    );
 
-    if (!updatedUser) {
-      throw new NotFoundError("User");
+    if (!updatedAccount) {
+      throw new NotFoundError("Account");
     }
 
     return NextResponse.json(
-      { success: true, data: updatedUser },
+      { success: true, data: updatedAccount },
       { status: 200 }
     );
   } catch (error) {
