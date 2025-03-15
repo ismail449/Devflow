@@ -23,7 +23,7 @@ export async function GET(
     }
     return NextResponse.json({ success: true, data: account }, { status: 200 });
   } catch (error) {
-    return handleError(error, "api");
+    return handleError(error, "api") as APIErrorResponse;
   }
 }
 
@@ -45,7 +45,7 @@ export async function DELETE(
     }
     return NextResponse.json({ success: true, data: account }, { status: 200 });
   } catch (error) {
-    return handleError(error, "api");
+    return handleError(error, "api") as APIErrorResponse;
   }
 }
 
@@ -87,6 +87,6 @@ export async function PUT(
       { status: 200 }
     );
   } catch (error) {
-    return handleError(error, "api");
+    return handleError(error, "api") as APIErrorResponse;
   }
 }

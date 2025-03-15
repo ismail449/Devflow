@@ -20,6 +20,6 @@ export async function POST(request: Request): Promise<Response> {
     }
     return NextResponse.json({ success: true, data: account }, { status: 200 });
   } catch (error) {
-    return handleError(error, "api");
+    return handleError(error, "api") as APIErrorResponse;
   }
 }

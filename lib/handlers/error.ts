@@ -20,7 +20,7 @@ const formatResponse = (
     },
   };
   return responseType === "api"
-    ? (NextResponse.json(responseContent, { status }) as APIErrorResponse)
+    ? NextResponse.json(responseContent, { status })
     : { status, ...responseContent };
 };
 
