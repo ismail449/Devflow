@@ -1,4 +1,5 @@
-import { IAccount } from "@/database/account.model";
+import ROUTES from "@/constants/routes";
+import { AccountDoc, IAccount } from "@/database/account.model";
 import { IUser } from "@/database/user.model";
 
 import { fetchHandler } from "./handlers/fetch";
@@ -7,6 +8,14 @@ const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000/api";
 
 export const api = {
+  auth: {
+    signInWithOAuth: async (data: SignInWithOAuthParams) =>
+      await fetchHandler(`${BASE_URL}/auth/${ROUTES.SIGN_IN_WITH_OAUTH}`, {
+        method: "POST",
+        body: JSON.stringify(data),
+      }),
+  },
+
   users: {
     getAll: async () => fetchHandler(`${BASE_URL}/users`),
 
@@ -39,8 +48,8 @@ export const api = {
 
     getById: async (id: string) => fetchHandler(`${BASE_URL}/accounts/${id}`),
 
-    getByProvider: async (providerAccountId: string) =>
-      fetchHandler(`${BASE_URL}/accounts/provider`, {
+    getByProvider: async <T = AccountDoc>(providerAccountId: string) =>
+      fetchHandler<T>(`${BASE_URL}/accounts/provider`, {
         method: "POST",
         body: JSON.stringify({ providerAccountId }),
       }),
