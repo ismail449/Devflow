@@ -14,6 +14,6 @@ const collectionSchema = new Schema<ICollection>(
 );
 
 const Collection =
-  models.Collection || model<ICollection>("Collection", collectionSchema);
+  models?.Collection || model<ICollection>("Collection", collectionSchema);
 
 export default Collection;
