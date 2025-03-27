@@ -1,6 +1,6 @@
 import ROUTES from "@/constants/routes";
 import { AccountDoc, IAccount } from "@/database/account.model";
-import { IUser } from "@/database/user.model";
+import { IUser, UserDoc } from "@/database/user.model";
 
 import { fetchHandler } from "./handlers/fetch";
 
@@ -19,7 +19,8 @@ export const api = {
   users: {
     getAll: async () => fetchHandler(`${BASE_URL}/users`),
 
-    getById: async (id: string) => fetchHandler(`${BASE_URL}/users/${id}`),
+    getById: async <T = UserDoc>(id: string) =>
+      fetchHandler<T>(`${BASE_URL}/users/${id}`),
 
     getByEmail: async (email: string) =>
       fetchHandler(`${BASE_URL}/users/email`, {

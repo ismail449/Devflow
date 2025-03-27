@@ -1,6 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   DefaultValues,
   FieldValues,
@@ -17,14 +18,17 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { UserDoc } from "@/database/user.model";
+import { toast } from "@/hooks/use-toast";
 
 interface AuthFormProps<T extends FieldValues> {
   formType: "SIGN_IN" | "SIGN_UP";
   schema: ZodType<T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse<UserDoc>>;
 }
 const AuthForm = <T extends FieldValues>({
   formType,
@@ -32,12 +36,31 @@ const AuthForm = <T extends FieldValues>({
   defaultValues,
   onSubmit,
 }: AuthFormProps<T>) => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
   const handleSubmit: SubmitHandler<T> = async (data: T) => {
-    await onSubmit(data);
+    const result = await onSubmit(data);
+
+    if (result.success) {
+      toast({
+        title: "Success",
+        description:
+          formType === "SIGN_IN"
+            ? "Signed In Successfully"
+            : "Signed Up Successfully",
+      });
+      router.push("/");
+    } else {
+      toast({
+        title: `Error ${result.status || 500}`,
+        description: result.error?.message || "An error occurred",
+        variant: "destructive",
+      });
+    }
   };
   const buttonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
 
@@ -63,12 +86,13 @@ const AuthForm = <T extends FieldValues>({
                 <FormControl>
                   <Input
                     required
-                    type={field.name === "passord" ? "password" : "text"}
+                    type={field.name === "password" ? "password" : "text"}
                     placeholder={field.name}
                     {...field}
                     className="paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 no-focus min-h-12 rounded-1.5 border"
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
