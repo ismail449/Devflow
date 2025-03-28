@@ -9,7 +9,7 @@ import { toast } from "@/hooks/use-toast";
 
 import { Button } from "../ui/button";
 
-const SocailAuthForm = () => {
+const SocialAuthForm = () => {
   const buttonClass =
     "background-dark400_light900 body-medium text-dark200_light800 min-h-12 flex-1 rounded-2 px-4 py-3.5";
 
@@ -24,7 +24,7 @@ const SocailAuthForm = () => {
         description:
           error instanceof Error
             ? error.message
-            : "An error occured while sing-in",
+            : "An error occurred while sing-in",
         variant: "destructive",
       });
     }
@@ -56,4 +56,4 @@ const SocailAuthForm = () => {
   );
 };
 
-export default SocailAuthForm;
+export default SocialAuthForm;

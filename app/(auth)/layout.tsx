@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
 
-import SocailAuthForm from "@/components/forms/SocailAuthForm";
+import SocialAuthForm from "@/components/forms/SocialAuthForm";
 
 export const metadata: Metadata = {
   title: "Auth",
@@ -32,7 +32,7 @@ export default function AuthLayout({
           />
         </div>
         {children}
-        <SocailAuthForm />
+        <SocialAuthForm />
       </section>
     </main>
   );
