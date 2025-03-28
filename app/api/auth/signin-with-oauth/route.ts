@@ -12,6 +12,7 @@ import { SignInWithOAuthSchema } from "@/lib/validations";
 
 export async function POST(request: Request) {
   const data = await request.json();
+  console.log("Received data:", data);
   await dbConnect();
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -65,8 +66,6 @@ export async function POST(request: Request) {
 
     const existingAccount = await Account.findOne({
       userId: existingUser._id,
-      provider: data.provider,
-      providerAccountId: data.providerAccountId,
     }).session(session);
 
     if (!existingAccount) {
