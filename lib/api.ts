@@ -22,8 +22,8 @@ export const api = {
     getById: async <T = UserDoc>(id: string) =>
       fetchHandler<T>(`${BASE_URL}/users/${id}`),
 
-    getByEmail: async (email: string) =>
-      fetchHandler(`${BASE_URL}/users/email`, {
+    getByEmail: async <T = UserDoc>(email: string) =>
+      fetchHandler<T>(`${BASE_URL}/users/email`, {
         method: "POST",
         body: JSON.stringify({ email }),
       }),

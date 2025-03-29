@@ -63,16 +63,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async jwt({ token, account }) {
       if (account) {
-        const providerAccountId =
-          account.type === "credentials"
-            ? token.email!
-            : account.providerAccountId!;
-        const { success, data: existingAccount } =
-          await api.accounts.getByProvider(providerAccountId);
+        const { success, data: existingUser } = await api.users.getByEmail(
+          token.email!
+        );
 
-        if (!success || !existingAccount) return token;
+        if (!success || !existingUser) return token;
 
-        const userId = existingAccount.userId;
+        const userId = existingUser._id;
 
         if (userId) token.sub = userId.toString();
       }
