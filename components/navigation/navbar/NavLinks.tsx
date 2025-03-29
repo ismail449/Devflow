@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 
 type NavLinksProps = {
   isMobileNav?: boolean;
+  userId?: string;
 };
-const NavLinks = ({ isMobileNav = false }: NavLinksProps) => {
+const NavLinks = ({ isMobileNav = false, userId }: NavLinksProps) => {
   const pathname = usePathname();
-  const userId = 1;
   return (
     <div className="flex flex-col gap-3">
       {sidebarLinks.map((link) => {

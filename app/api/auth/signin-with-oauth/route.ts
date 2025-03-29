@@ -12,7 +12,7 @@ import { SignInWithOAuthSchema } from "@/lib/validations";
 
 export async function POST(request: Request) {
   const data = await request.json();
-  console.log("Received data:", data);
+
   await dbConnect();
   const session = await mongoose.startSession();
   session.startTransaction();
