@@ -37,7 +37,7 @@ const QuestionCard = ({
           imageUrl={author.image}
           alt={author.name}
           value={author.name}
-          addionalText={`• asked ${creationTimeStamp}`}
+          additionalText={`• asked ${creationTimeStamp}`}
           href={ROUTES.PROFILE(author._id)}
           textStyles="body-medium text-dark400_light700"
           isAuthor
@@ -48,21 +48,21 @@ const QuestionCard = ({
             imageUrl="/icons/like.svg"
             alt="like"
             value={upvotes}
-            addionalText=" Votes"
+            additionalText=" Votes"
             textStyles="small-medium text-dark400_light800"
           />
           <Metric
             imageUrl="/icons/message.svg"
             alt="answers"
             value={answers}
-            addionalText=" Answers"
+            additionalText=" Answers"
             textStyles="small-medium text-dark400_light800"
           />
           <Metric
             imageUrl="/icons/eye.svg"
             alt="views"
             value={views}
-            addionalText=" Views"
+            additionalText=" Views"
             textStyles="small-medium text-dark400_light800"
           />
         </div>

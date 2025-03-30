@@ -10,8 +10,8 @@ type Props = {
   imageWidth?: number;
   imageHeight?: number;
   value: string | number;
-  addionalText?: string;
-  addionalTextStyles?: string;
+  additionalText?: string;
+  additionalTextStyles?: string;
   imageStlyes?: string;
   href?: string;
   textStyles?: string;
@@ -21,8 +21,8 @@ type Props = {
 const Metric = ({
   imageHeight = 20,
   imageWidth = 20,
-  addionalText,
-  addionalTextStyles,
+  additionalText,
+  additionalTextStyles,
   alt,
   imageUrl,
   value,
@@ -44,15 +44,15 @@ const Metric = ({
       <p className={`${textStyles} flex items-center gap-1`}>
         {value}
 
-        {addionalText ? (
+        {additionalText ? (
           <span
             className={cn(
               `small-regular line-clamp-1`,
               isAuthor ? "max-sm:hidden" : "",
-              addionalTextStyles
+              additionalTextStyles
             )}
           >
-            {addionalText}
+            {additionalText}
           </span>
         ) : null}
       </p>
