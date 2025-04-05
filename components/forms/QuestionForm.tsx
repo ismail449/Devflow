@@ -43,10 +43,10 @@ const QuestionForm = () => {
       value: string[];
     }
   ) => {
-    const filteredTages = field.value.filter((t) => t !== tag);
-    form.setValue("tags", filteredTages);
+    const filteredTags = field.value.filter((t) => t !== tag);
+    form.setValue("tags", filteredTags);
 
-    if (filteredTages.length === 0) {
+    if (filteredTags.length === 0) {
       form.setError("tags", {
         type: "manual",
         message: "Tags are required",
