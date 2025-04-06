@@ -7,6 +7,7 @@ import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { createQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validations";
 
 import TagCard from "../cards/TagCard";
@@ -81,7 +82,7 @@ const QuestionForm = () => {
     }
   };
   const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-    console.log(data);
+    createQuestion(data);
   };
   return (
     <Form {...form}>
