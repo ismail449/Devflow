@@ -1,80 +1,71 @@
 "use server";
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 
-import Question, { IQuestion, QuestionDoc } from "@/database/question.model";
+import Question from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
-import Tag, { TagDoc } from "@/database/tag.model";
+import Tag from "@/database/tag.model";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { AskQuestionSchema } from "../validations";
+
 export async function createQuestion(
-  params: CreateQuestion
-): Promise<ActionResponse<QuestionDoc>> {
-  const validateResult = await action({
-    authorize: true,
+  params: CreateQuestionParams
+): Promise<ActionResponse<Question>> {
+  const validationResult = await action({
     params,
     schema: AskQuestionSchema,
+    authorize: true,
   });
-  if (validateResult instanceof Error) {
-    return handleError(validateResult) as ErrorResponse;
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
   }
-  const { title, content, tags } = validateResult.params!;
-  const userId = validateResult.session?.user?.id;
-  const lowercaseTags = tags.map((tag) => tag.toLowerCase());
+
+  const { title, content, tags } = validationResult.params!;
+  const userId = validationResult?.session?.user?.id;
 
   const session = await mongoose.startSession();
   session.startTransaction();
+
   try {
-    const existingTags: TagDoc[] = await Tag.find({
-      name: { $in: lowercaseTags },
-    }).session(session);
-    console.log("existingTags", existingTags);
-    await Tag.updateMany(
-      {
-        _id: { $in: existingTags.map((tag) => tag._id) },
-      },
-      { $inc: { questions: 1 } },
+    const [question] = await Question.create(
+      [{ title, content, author: userId }],
       { session }
     );
 
-    const tagsToCreate = lowercaseTags.filter(
-      (tag) => !existingTags.map((tag) => tag.name).includes(tag)
-    );
-    console.log("tagsToCreate", tagsToCreate);
-    const createdTags: TagDoc[] = await Tag.create(
-      tagsToCreate.map((tag) => {
-        return { name: tag, questions: 1 };
-      }),
-      { session, ordered: true }
-    );
+    if (!question) {
+      throw new Error("Failed to create question");
+    }
 
-    const companiedTags = [...existingTags, ...createdTags];
-    const newQuestion: IQuestion = {
-      title,
-      content,
-      tags: companiedTags.map((tag) => tag._id as Types.ObjectId),
-      authorId: new mongoose.Types.ObjectId(userId),
-    };
+    const tagIds: mongoose.Types.ObjectId[] = [];
+    const tagQuestionDocuments = [];
 
-    const [question]: QuestionDoc[] = await Question.create([newQuestion], {
-      session,
-      ordered: true,
-    });
+    for (const tag of tags) {
+      const existingTag = await Tag.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${tag}$`, "i") } },
+        { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
+        { upsert: true, new: true, session }
+      );
 
-    await TagQuestion.create(
-      companiedTags.map((tag) => {
-        return { tag: tag._id, question: question._id };
-      }),
-      { session, ordered: true }
+      tagIds.push(existingTag._id);
+      tagQuestionDocuments.push({
+        tag: existingTag._id,
+        question: question._id,
+      });
+    }
+
+    await TagQuestion.insertMany(tagQuestionDocuments, { session });
+
+    await Question.findByIdAndUpdate(
+      question._id,
+      { $push: { tags: { $each: tagIds } } },
+      { session }
     );
 
     await session.commitTransaction();
 
-    return {
-      success: true,
-      data: JSON.parse(JSON.stringify(question)),
-    } as SuccessResponse<QuestionDoc>;
+    return { success: true, data: JSON.parse(JSON.stringify(question)) };
   } catch (error) {
     await session.abortTransaction();
     return handleError(error) as ErrorResponse;
