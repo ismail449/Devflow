@@ -12,6 +12,7 @@ type Author = {
 type Question = {
   _id: string;
   title: string;
+  content: string;
   description: string;
   tags: Tag[];
   author: Author;

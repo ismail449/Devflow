@@ -11,7 +11,7 @@ import { z } from "zod";
 
 import ROUTES from "@/constants/routes";
 import { toast } from "@/hooks/use-toast";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { AskQuestionSchema } from "@/lib/validations";
 
 import TagCard from "../cards/TagCard";
@@ -31,7 +31,12 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const QuestionForm = () => {
+type Props = {
+  isEdit?: boolean;
+  question?: Question;
+};
+
+const QuestionForm = ({ isEdit = false, question }: Props) => {
   const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
   const [isPending, startTransition] = useTransition();
@@ -39,9 +44,9 @@ const QuestionForm = () => {
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      tags: [],
+      title: question?.title || "",
+      content: question?.content || "",
+      tags: question?.tags.map((tag) => tag.name) || [],
     },
   });
   const handleTagRemove = (
@@ -91,11 +96,21 @@ const QuestionForm = () => {
     data: z.infer<typeof AskQuestionSchema>
   ) => {
     startTransition(async () => {
-      const result = await createQuestion(data);
+      let result;
+      if (isEdit && question) {
+        result = await editQuestion({
+          ...data,
+          questionId: question._id,
+        });
+      } else {
+        result = await createQuestion(data);
+      }
 
       if (result.success) {
         toast({
-          title: "Question created successfully",
+          title: isEdit
+            ? "Question edited successfully"
+            : "Question created successfully",
         });
         if (result.data)
           router.push(ROUTES.QUESTIONS(result.data._id as string));
@@ -216,7 +231,7 @@ const QuestionForm = () => {
                 <span>Submitting...</span>
               </>
             ) : (
-              <span>Ask A Question</span>
+              <span>{isEdit ? "Edit" : "Ask A Question"}</span>
             )}
           </Button>
         </div>
