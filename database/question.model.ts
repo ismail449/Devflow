@@ -5,8 +5,8 @@ export interface IQuestion {
   content: string;
   tags: Types.ObjectId[];
   author: Types.ObjectId;
-  upVotes?: number;
-  downVotes?: number;
+  upvotes?: number;
+  downvotes?: number;
   answerCount?: number;
   views?: number;
 }
@@ -17,8 +17,8 @@ const questionSchema = new Schema<IQuestion>(
     content: { type: String, required: true },
     tags: [{ type: Schema.Types.ObjectId, required: true, ref: "Tag" }],
     author: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-    upVotes: { type: Number, default: 0 },
-    downVotes: { type: Number, default: 0 },
+    upvotes: { type: Number, default: 0 },
+    downvotes: { type: Number, default: 0 },
     answerCount: { type: Number, default: 0 },
     views: { type: Number, default: 0 },
   },

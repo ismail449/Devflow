@@ -72,7 +72,13 @@ const QuestionForm = ({ isEdit = false, question }: Props) => {
     if (e.key === "Enter") {
       e.preventDefault();
       const tagInput = e.currentTarget.value.trim();
-      if (tagInput && tagInput.length < 15 && !field.value.includes(tagInput)) {
+      if (
+        tagInput &&
+        tagInput.length < 15 &&
+        !field.value.some(
+          (value) => value.toLowerCase() === tagInput.toLowerCase()
+        )
+      ) {
         const tags = field.value;
         if (tags.length < 5) {
           form.setValue("tags", [...field.value, tagInput]);
@@ -84,7 +90,11 @@ const QuestionForm = ({ isEdit = false, question }: Props) => {
           type: "manual",
           message: "Tag length must be less than 15 characters",
         });
-      } else if (field.value.includes(tagInput)) {
+      } else if (
+        field.value.some(
+          (value) => value.toLowerCase() === tagInput.toLowerCase()
+        )
+      ) {
         form.setError("tags", {
           type: "manual",
           message: "Tag already added",

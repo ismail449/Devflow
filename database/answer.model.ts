@@ -4,8 +4,8 @@ export interface IAnswer {
   questionId: Types.ObjectId;
   content: string;
   authorId: Types.ObjectId;
-  upVotes?: number;
-  downVotes?: number;
+  upvotes?: number;
+  downvotes?: number;
 }
 export type AnswerDoc = IAnswer & Document;
 const questionSchema = new Schema<IAnswer>(
@@ -17,8 +17,8 @@ const questionSchema = new Schema<IAnswer>(
     },
     content: { type: String, required: true },
     authorId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
-    upVotes: { type: Number, default: 0 },
-    downVotes: { type: Number, default: 0 },
+    upvotes: { type: Number, default: 0 },
+    downvotes: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

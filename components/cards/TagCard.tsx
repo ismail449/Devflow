@@ -32,7 +32,7 @@ const TagCard = ({
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
   };
-  const Contenet = (
+  const Content = (
     <>
       <Badge className="subtle-medium background-light800_dark300 text-light400_light500 flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase">
         <div className="flex-center space-x-2">
@@ -59,7 +59,7 @@ const TagCard = ({
     if (isButton) {
       return (
         <button onClick={handleClick} className="flex justify-between gap-2">
-          {Contenet}
+          {Content}
         </button>
       );
     }
@@ -69,7 +69,7 @@ const TagCard = ({
         key={_id}
         className="flex items-center justify-between gap-2"
       >
-        {Contenet}
+        {Content}
       </Link>
     );
   }
@@ -79,7 +79,7 @@ const TagCard = ({
       key={_id}
       className="flex items-center justify-between gap-2"
     >
-      {Contenet}
+      {Content}
     </Link>
   );
 };

@@ -1,6 +1,7 @@
 import mongoose, { ConnectOptions, Mongoose } from "mongoose";
 
 import logger from "./logger";
+import "@/database";
 
 const MONGOOSE_URI = process.env.MONGODB_URI;
 
