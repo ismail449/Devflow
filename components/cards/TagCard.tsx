@@ -65,7 +65,7 @@ const TagCard = ({
     }
     return (
       <Link
-        href={ROUTES.TAGS(_id)}
+        href={ROUTES.TAG(_id)}
         key={_id}
         className="flex items-center justify-between gap-2"
       >
@@ -75,7 +75,7 @@ const TagCard = ({
   }
   return (
     <Link
-      href={ROUTES.TAGS(_id)}
+      href={ROUTES.TAG(_id)}
       key={_id}
       className="flex items-center justify-between gap-2"
     >

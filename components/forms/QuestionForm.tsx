@@ -123,7 +123,7 @@ const QuestionForm = ({ isEdit = false, question }: Props) => {
             : "Question created successfully",
         });
         if (result.data)
-          router.push(ROUTES.QUESTIONS(result.data._id as string));
+          router.push(ROUTES.QUESTION(result.data._id as string));
       } else {
         toast({
           title: `Error: ${result.status}`,

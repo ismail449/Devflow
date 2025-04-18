@@ -21,7 +21,7 @@ const QuestionCard = ({
         {creationTimeStamp}
       </span>
 
-      <Link href={ROUTES.QUESTIONS(_id)}>
+      <Link href={ROUTES.QUESTION(_id)}>
         <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 ">
           {title}
         </h3>
