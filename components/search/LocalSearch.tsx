@@ -13,9 +13,15 @@ type Props = {
   imgSrc?: string;
   route: string;
   otherClasses?: string;
+  iconPosition?: "left" | "right";
 };
 
-const LocalSearch = ({ placeholder, imgSrc, otherClasses }: Props) => {
+const LocalSearch = ({
+  placeholder,
+  imgSrc,
+  otherClasses,
+  iconPosition = "left",
+}: Props) => {
   const { searchQuery, setSearchQuery } = useUpdateUrlQuery("query", 600);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,12 +32,14 @@ const LocalSearch = ({ placeholder, imgSrc, otherClasses }: Props) => {
     <div
       className={`background-light800_darkgradient flex min-h-[56px] grow items-center rounded-[10px] p-4 ${otherClasses ?? ""}`}
     >
-      <Image
-        src={imgSrc || "./icons/search.svg"}
-        alt="search icon"
-        width={20}
-        height={20}
-      />
+      {iconPosition === "left" && (
+        <Image
+          src={imgSrc || "./icons/search.svg"}
+          alt="search icon"
+          width={20}
+          height={20}
+        />
+      )}
       <Input
         type="search"
         placeholder={placeholder ?? ""}
@@ -39,6 +47,15 @@ const LocalSearch = ({ placeholder, imgSrc, otherClasses }: Props) => {
         onChange={handleSearch}
         value={searchQuery}
       />
+
+      {iconPosition === "right" && (
+        <Image
+          src={imgSrc || "./icons/search.svg"}
+          alt="search icon"
+          width={15}
+          height={15}
+        />
+      )}
     </div>
   );
 };
