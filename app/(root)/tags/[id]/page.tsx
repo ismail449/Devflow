@@ -1,47 +1,37 @@
-import Link from "next/link";
+import React from "react";
 
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
-import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
-import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
-import { getQuestions } from "@/lib/actions/question.action";
+import { getTagQuestions } from "@/lib/actions/tag.action";
 
-type SearchParams = Promise<{ [key: string]: string | undefined }>;
+const page = async ({ searchParams, params }: RouteParams) => {
+  const { id } = await params;
+  const { page, pageSize, query } = await searchParams;
 
-const Home = async ({ searchParams }: { searchParams: SearchParams }) => {
-  const { query = "", filter = "", page, pageSize } = await searchParams;
-  const { success, data, error } = await getQuestions({
-    filter: filter || "",
-    query: query || "",
+  const { success, data, error } = await getTagQuestions({
+    tagId: id,
     page: Number(page) || 1,
     pageSize: Number(pageSize) || 10,
+    query,
   });
 
-  const { questions } = data || {};
-
+  const { questions, tag } = data || {};
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
-        <h1 className="h1-bold text-dark100_light900">All Questions</h1>
-        <Button
-          className="primary-gradient min-h-[46px] px-4 py-3 !text-light-900"
-          asChild
-        >
-          <Link href={ROUTES.ASK_QUESTION}>Ask a Question</Link>
-        </Button>
+        <h1 className="h1-bold text-dark100_light900">{tag?.name}</h1>
       </section>
       <section className="mt-11">
         <LocalSearch
           placeholder="Search for Questions Here..."
           imgSrc="/icons/search.svg"
           otherClasses="flex-1"
-          route="/"
+          route={ROUTES.TAG(id)}
         />
       </section>
-      <HomeFilter />
       <DataRenderer
         success={success}
         error={error}
@@ -59,4 +49,4 @@ const Home = async ({ searchParams }: { searchParams: SearchParams }) => {
   );
 };
 
-export default Home;
+export default page;

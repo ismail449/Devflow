@@ -76,7 +76,7 @@ const RightSidebar = () => {
                 name={name}
                 questionsCount={questions}
                 showCount
-                isCompact
+                compact
               />
             );
           })}

@@ -210,7 +210,7 @@ const QuestionForm = ({ isEdit = false, question }: Props) => {
                             _id={tag}
                             key={tag}
                             name={tag}
-                            isCompact
+                            compact
                             remove
                             isButton
                             handleRemove={() => handleTagRemove(tag, field)}
