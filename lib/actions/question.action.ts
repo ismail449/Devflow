@@ -207,6 +207,7 @@ export async function getQuestion(
   try {
     const question = await Question.findById(questionId)
       .populate("tags")
+      .populate("author", "_id image name")
       .session(session);
     if (!question) {
       throw new NotFoundError("Question");

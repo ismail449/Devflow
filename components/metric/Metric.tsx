@@ -12,7 +12,7 @@ type Props = {
   value: string | number;
   additionalText?: string;
   additionalTextStyles?: string;
-  imageStlyes?: string;
+  imageStyles?: string;
   href?: string;
   textStyles?: string;
   isAuthor?: boolean;
@@ -26,7 +26,7 @@ const Metric = ({
   alt,
   imageUrl,
   value,
-  imageStlyes,
+  imageStyles,
   href,
   textStyles,
   isAuthor,
@@ -38,7 +38,7 @@ const Metric = ({
         width={imageWidth}
         height={imageHeight}
         alt={alt}
-        className={`rounded-full object-contain ${imageStlyes}`}
+        className={`rounded-full object-contain ${imageStyles}`}
       />
 
       <p className={`${textStyles} flex items-center gap-1`}>
