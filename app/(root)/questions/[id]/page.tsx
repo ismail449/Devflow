@@ -25,7 +25,8 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   if (!question || !success) return redirect("/404");
 
-  const { author, createdAt, answers, views, tags, title, content } = question;
+  const { author, createdAt, answerCount, views, tags, title, content } =
+    question;
   const createdAtDate = new Date(createdAt);
 
   return (
@@ -65,7 +66,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         <Metric
           imageUrl="/icons/message.svg"
           alt="message icon"
-          value={answers}
+          value={answerCount}
           additionalText=""
           textStyles="small-regular text-dark400_light700"
         />
@@ -89,7 +90,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         ))}
       </div>
       <section className="my-5">
-        <AnswerForm />
+        <AnswerForm questionId={question._id} />
       </section>
     </>
   );

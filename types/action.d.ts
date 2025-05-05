@@ -35,3 +35,8 @@ type GetTagQuestionsParams = {
 type IncrementViewsParams = {
   questionId: string;
 };
+
+type CreateAnswerParams = {
+  questionId: string;
+  content: string;
+};

@@ -4,10 +4,12 @@ import { MDXEditorMethods } from "@mdxeditor/editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { toast } from "@/hooks/use-toast";
+import { createAnswer } from "@/lib/actions/answer.action";
 import { AnswerSchema } from "@/lib/validations";
 
 import { Button } from "../ui/button";
@@ -22,8 +24,12 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const AnswerForm = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+type Props = {
+  questionId: string;
+};
+
+const AnswerForm = ({ questionId }: Props) => {
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAiSubmitting, setIsAiSubmitting] = useState(false);
   const editorRef = useRef<MDXEditorMethods>(null);
   const form = useForm<z.infer<typeof AnswerSchema>>({
@@ -33,7 +39,30 @@ const AnswerForm = () => {
     },
   });
   const handleSubmit = async (data: z.infer<typeof AnswerSchema>) => {
-    console.log(data);
+    startAnsweringTransition(async () => {
+      const {
+        data: answer,
+        success,
+        error,
+        status,
+      } = await createAnswer({
+        ...data,
+        questionId,
+      });
+      if (success) {
+        form.reset();
+        toast({
+          title: "Success",
+          description: "Your answer has been posted successfully",
+        });
+      } else {
+        toast({
+          title: `Error: ${status}`,
+          description: error?.message || "Something went wrong",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
@@ -75,7 +104,7 @@ const AnswerForm = () => {
             name="content"
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3">
-                <FormControl className="mt-3.5">
+                <FormControl>
                   <Editor
                     value={field.value}
                     editorRef={editorRef}
@@ -87,8 +116,12 @@ const AnswerForm = () => {
             )}
           />
           <div className="flex justify-end">
-            <Button type="submit" className="primary-gradient w-fit">
-              {isSubmitting ? (
+            <Button
+              type="submit"
+              className="primary-gradient w-fit"
+              disabled={isAnswering}
+            >
+              {isAnswering ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" />
                   Posting...

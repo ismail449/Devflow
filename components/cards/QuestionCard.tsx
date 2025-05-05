@@ -12,7 +12,16 @@ type Props = {
 };
 
 const QuestionCard = ({
-  question: { _id, title, tags, author, createdAt, upvotes, answers, views },
+  question: {
+    _id,
+    title,
+    tags,
+    author,
+    createdAt,
+    upvotes,
+    answerCount,
+    views,
+  },
 }: Props) => {
   const creationTimeStamp = getTimeStamp(createdAt);
   return (
@@ -54,7 +63,7 @@ const QuestionCard = ({
           <Metric
             imageUrl="/icons/message.svg"
             alt="answers"
-            value={answers}
+            value={answerCount}
             additionalText=" Answers"
             textStyles="small-medium text-dark400_light800"
           />
