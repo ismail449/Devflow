@@ -50,3 +50,11 @@ type PaginatedSearchParams = {
   filter?: string;
   sort?: string;
 };
+
+type Answer = {
+  questionId: string;
+  content: string;
+  author: Author;
+  upvotes?: number;
+  downvotes?: number;
+};

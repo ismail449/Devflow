@@ -40,3 +40,7 @@ type CreateAnswerParams = {
   questionId: string;
   content: string;
 };
+
+interface GetQuestionAnswersParams extends PaginatedSearchParams {
+  questionId: string;
+}
