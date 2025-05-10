@@ -52,6 +52,8 @@ type PaginatedSearchParams = {
 };
 
 type Answer = {
+  _id: string;
+  createdAt: Date;
   questionId: string;
   content: string;
   author: Author;

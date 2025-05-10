@@ -3,19 +3,33 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import React from "react";
 
+import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/metric/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
+import { getQuestionAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { getTimeStamp, formatNumber } from "@/lib/utils";
 
-const QuestionDetails = async ({ params }: RouteParams) => {
+const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
+  const { page, pageSize } = await searchParams;
 
-  const { success, data: question } = await getQuestion({ questionId: id });
+  const {
+    success,
+    data: question,
+    error: answersError,
+  } = await getQuestion({ questionId: id });
+  const { data: answersResult, success: areAnswersLoaded } =
+    await getQuestionAnswers({
+      questionId: id,
+      page: Number(page) || 1,
+      pageSize: Number(pageSize) || 10,
+      filter: "latest",
+    });
 
   after(async () => {
     await incrementViews({
@@ -89,6 +103,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           />
         ))}
       </div>
+
+      <section className="my-5">
+        <AllAnswers
+          data={answersResult?.answers}
+          success={areAnswersLoaded}
+          error={answersError}
+          totalAnswers={answersResult?.totalAnswers || 0}
+        />
+      </section>
       <section className="my-5">
         <AnswerForm questionId={question._id} />
       </section>
