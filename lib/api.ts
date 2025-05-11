@@ -70,4 +70,12 @@ export const api = {
     delete: async (id: string) =>
       fetchHandler(`${BASE_URL}/accounts/${id}`, { method: "DELETE" }),
   },
+
+  ai: {
+    getAnswer: async (question: string, content: string): APIResponse<string> =>
+      await fetchHandler(`${BASE_URL}/ai/answers`, {
+        body: JSON.stringify({ question, content }),
+        method: "POST",
+      }),
+  },
 };
