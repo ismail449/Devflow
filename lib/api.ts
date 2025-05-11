@@ -72,10 +72,15 @@ export const api = {
   },
 
   ai: {
-    getAnswer: async (question: string, content: string): APIResponse<string> =>
+    getAnswer: async (
+      question: string,
+      content: string,
+      userAnswer?: string
+    ): APIResponse<string> =>
       await fetchHandler(`${BASE_URL}/ai/answers`, {
-        body: JSON.stringify({ question, content }),
+        body: JSON.stringify({ question, content, userAnswer }),
         method: "POST",
+        timeout: 100000,
       }),
   },
 };
