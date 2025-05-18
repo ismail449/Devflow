@@ -17,6 +17,7 @@ type Question = {
   tags: Tag[];
   author: Author;
   upvotes: number;
+  downvotes: number;
   answerCount: number;
   views: number;
   createdAt: Date;
