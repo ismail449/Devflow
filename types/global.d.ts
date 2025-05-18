@@ -61,3 +61,7 @@ type Answer = {
   upvotes?: number;
   downvotes?: number;
 };
+
+type Vote = {
+  _id: string;
+};

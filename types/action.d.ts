@@ -44,3 +44,13 @@ type CreateAnswerParams = {
 interface GetQuestionAnswersParams extends PaginatedSearchParams {
   questionId: string;
 }
+
+type CreateVoteParams = {
+  targetId: string;
+  targetType: "question" | "answer";
+  voteType: "upvote" | "downvote";
+};
+
+type UpdateVoteCountParams = CreateVoteParams & {
+  change: 1 | -1;
+};
