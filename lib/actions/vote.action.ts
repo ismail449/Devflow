@@ -74,9 +74,10 @@ export async function createVote(
   try {
     const existingVote = await Vote.findOne({
       author: userId,
-      actionType: voteType,
+      actionType: targetType,
       actionId: targetId,
     }).session(session);
+
     if (existingVote) {
       if (existingVote.voteType === voteType) {
         await Vote.deleteOne({ _id: existingVote._id }).session(session);
@@ -85,6 +86,15 @@ export async function createVote(
           session
         );
       } else {
+        await updateVoteCount(
+          {
+            targetId,
+            targetType,
+            voteType: existingVote.voteType,
+            change: -1,
+          },
+          session
+        );
         await Vote.findByIdAndUpdate(
           existingVote._id,
           { voteType },
