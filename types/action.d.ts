@@ -54,3 +54,10 @@ type CreateVoteParams = {
 type UpdateVoteCountParams = CreateVoteParams & {
   change: 1 | -1;
 };
+
+type HasVotedParams = Pick<CreateVoteParams, "targetId" | "targetType">;
+
+type HasVotedResponse = {
+  hasUpvoted: boolean;
+  hasDownvoted: boolean;
+};
