@@ -58,8 +58,8 @@ type Answer = {
   questionId: string;
   content: string;
   author: Author;
-  upvotes?: number;
-  downvotes?: number;
+  upvotes: number;
+  downvotes: number;
 };
 
 type Vote = {
