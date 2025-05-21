@@ -65,3 +65,15 @@ type Answer = {
 type Vote = {
   _id: string;
 };
+
+type User = {
+  _id: string;
+  name: string;
+  userName: string;
+  email: string;
+  bio?: string;
+  image?: string;
+  location?: string;
+  portfolio?: string;
+  reputation?: number;
+};
