@@ -29,7 +29,7 @@ const UserAvatar = async ({
 
   return (
     <Link href={ROUTES.PROFILE(id)}>
-      <Avatar className={className}>
+      <Avatar className={cn("relative", className)}>
         <AvatarImage src={imageUrl} alt="user avatar" />
         <AvatarFallback
           className={cn(
