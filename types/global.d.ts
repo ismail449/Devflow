@@ -77,3 +77,9 @@ type User = {
   portfolio?: string;
   reputation?: number;
 };
+
+type Collection = {
+  _id: string;
+  author: string;
+  question: string;
+};

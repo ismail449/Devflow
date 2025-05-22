@@ -61,3 +61,7 @@ type HasVotedResponse = {
   hasUpvoted: boolean;
   hasDownvoted: boolean;
 };
+
+type CollectionBaseParams = {
+  questionId: string;
+};
