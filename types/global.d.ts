@@ -80,6 +80,6 @@ type User = {
 
 type Collection = {
   _id: string;
-  author: string;
-  question: string;
+  author: string | Author;
+  question: Question;
 };
