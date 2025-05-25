@@ -6,12 +6,22 @@ import { EMPTY_ANSWERS } from "@/constants/states";
 import AnswerCard from "../cards/AnswerCard";
 import DataRenderer from "../DataRenderer";
 import CommonFilter from "../filters/CommonFilter";
+import Pagination from "../Pagination";
 
 interface Props extends ActionResponse<Answer[]> {
   totalAnswers: number;
+  isNext: boolean;
+  page: number;
 }
 
-const AllAnswers = ({ success, totalAnswers, data, error }: Props) => {
+const AllAnswers = ({
+  success,
+  totalAnswers,
+  data,
+  error,
+  isNext,
+  page,
+}: Props) => {
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
@@ -29,6 +39,7 @@ const AllAnswers = ({ success, totalAnswers, data, error }: Props) => {
         success={success}
         error={error}
       />
+      <Pagination page={page} isNext={isNext || false} />
     </div>
   );
 };

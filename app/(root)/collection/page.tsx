@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilter from "@/components/filters/CommonFilter";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import { CollectionFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
@@ -19,11 +20,11 @@ const Collections = async ({
   const { success, data, error } = await getSavedQuestions({
     filter: filter || "",
     query: query || "",
-    page: Number(page) || 1,
-    pageSize: Number(pageSize) || 10,
+    page: Number(page) || 10,
+    pageSize: Number(pageSize) || 1,
   });
 
-  const { collection: collections } = data || {};
+  const { collection: collections, isNext } = data || {};
 
   return (
     <>
@@ -56,6 +57,7 @@ const Collections = async ({
           </div>
         )}
       />
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };
