@@ -45,7 +45,7 @@ export const getTags = async (
       sortCriteria = { questions: -1 };
       break;
     case "name":
-      sortCriteria = { name: -1 };
+      sortCriteria = { name: 1 };
       break;
     default:
       sortCriteria = { createdAt: -1 };
@@ -82,7 +82,13 @@ export const getTagQuestions = async (
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { page = 1, pageSize = 10, query, tagId } = validationResult.params!;
+  const {
+    page = 1,
+    pageSize = 10,
+    query,
+    tagId,
+    filter,
+  } = validationResult.params!;
   const skip = (page - 1) * pageSize;
   const limit = pageSize;
 
@@ -95,9 +101,28 @@ export const getTagQuestions = async (
       tags: { $in: [tagId] },
     };
 
+    let sortCriteria = {};
+
+    switch (filter) {
+      case "newest":
+        sortCriteria = { createdAt: -1 };
+        break;
+      case "unanswered":
+        filterQuery.answerCount = 0;
+        sortCriteria = { createdAt: -1 };
+        break;
+      case "popular":
+        sortCriteria = { upvotes: -1 };
+        break;
+      default:
+        sortCriteria = { createdAt: -1 };
+        break;
+    }
+
     if (query) {
       filterQuery.title = { $regex: query, $options: "i" };
     }
+
     const totalQuestions = await Question.countDocuments(filterQuery);
     const questions = await Question.find(filterQuery)
       .select("_id title views answers upvotes downvotes author createdAt")
@@ -107,7 +132,8 @@ export const getTagQuestions = async (
       ])
       .lean()
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort(sortCriteria);
     const isNext = totalQuestions > skip + questions.length;
     return {
       success: true,

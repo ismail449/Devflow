@@ -15,8 +15,8 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   filters: { name: string; value: string }[];
-  otherClasses: string;
-  containerClasses: string;
+  otherClasses?: string;
+  containerClasses?: string;
 };
 
 const CommonFilter = ({

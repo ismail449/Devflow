@@ -20,19 +20,20 @@ import { getTimeStamp, formatNumber } from "@/lib/utils";
 
 const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
-  const { page, pageSize } = await searchParams;
+  const { page, pageSize, filter } = await searchParams;
 
   const {
     success,
     data: question,
     error: answersError,
   } = await getQuestion({ questionId: id });
+
   const { data: answersResult, success: areAnswersLoaded } =
     await getQuestionAnswers({
       questionId: id,
       page: Number(page) || 1,
       pageSize: Number(pageSize) || 10,
-      filter: "latest",
+      filter,
     });
 
   after(async () => {
