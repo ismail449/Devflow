@@ -3,7 +3,6 @@ import Link from "next/link";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import CommonFilter from "@/components/filters/CommonFilter";
-import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { HomePageFilters } from "@/constants/filters";
@@ -46,10 +45,9 @@ const Home = async ({ searchParams }: { searchParams: SearchParams }) => {
         <CommonFilter
           filters={HomePageFilters}
           otherClasses="min-h-[56px] sm:min-w-[170px]"
-          containerClasses="hidden max-md:flex"
+          containerClasses=""
         />
       </section>
-      <HomeFilter />
       <DataRenderer
         success={success}
         error={error}
