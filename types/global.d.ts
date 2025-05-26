@@ -1,6 +1,7 @@
 type Tag = {
   _id: string;
   name: string;
+  questions?: number;
 };
 
 type Author = {

@@ -4,11 +4,18 @@ import React from "react";
 
 import ROUTES from "@/constants/routes";
 import { getHotQuestions } from "@/lib/actions/question.action";
+import { getTopTags } from "@/lib/actions/tag.action";
 
+import TagCard from "../cards/TagCard";
 import DataRenderer from "../DataRenderer";
 
 const RightSidebar = async () => {
   const { success, data: hotQuestions, error } = await getHotQuestions();
+  const {
+    success: tagSuccess,
+    data: tags,
+    error: tagError,
+  } = await getTopTags();
 
   return (
     <section className="light-border background-light900_dark200 sticky right-0 top-0 flex h-screen flex-col justify-between gap-6 overflow-y-auto border-l p-6 pt-36 shadow-light-300 dark:shadow-none max-xl:hidden max-sm:hidden lg:w-[330px]">
@@ -53,20 +60,34 @@ const RightSidebar = async () => {
 
       <div>
         <h3 className="h3-bold">Popular Tags</h3>
-        {/* <div className="mt-7 flex w-full flex-col gap-4">
-          {popularTags.map(({ _id, name, questions }) => {
+
+        <DataRenderer
+          success={tagSuccess}
+          error={tagError}
+          data={tags}
+          empty={{
+            title: "No tags found",
+            message: "No tags have been created yet",
+          }}
+          render={(tags) => {
             return (
-              <TagCard
-                key={_id}
-                _id={_id}
-                name={name}
-                questionsCount={questions}
-                showCount
-                compact
-              />
+              <div className="mt-7 flex w-full flex-col gap-[30px]">
+                {tags.map(({ _id, name, questions }) => {
+                  return (
+                    <TagCard
+                      key={_id}
+                      _id={_id}
+                      name={name}
+                      questions={questions}
+                      showCount
+                      compact
+                    />
+                  );
+                })}
+              </div>
             );
-          })}
-        </div> */}
+          }}
+        />
       </div>
     </section>
   );
