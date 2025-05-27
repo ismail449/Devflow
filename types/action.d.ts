@@ -65,3 +65,7 @@ type HasVotedResponse = {
 type CollectionBaseParams = {
   questionId: string;
 };
+
+type GetUserParams = {
+  userId: string;
+};
