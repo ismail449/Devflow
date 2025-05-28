@@ -85,3 +85,9 @@ type Collection = {
   author: string | Author;
   question: Question;
 };
+
+type BadgeCounts = {
+  GOLD: number;
+  SILVER: number;
+  BRONZE: number;
+};
