@@ -69,3 +69,7 @@ type CollectionBaseParams = {
 type GetUserParams = {
   userId: string;
 };
+
+type GetUserQuestionsParams = {
+  userId: string;
+} & Omit<PaginatedSearchParams, "query" | "filter" | "sort">;
