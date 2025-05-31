@@ -8,6 +8,7 @@ import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { NotFoundError } from "../http-errors";
 import {
+  GetUserAnswersSchema,
   GetUserQuestionsSchema,
   GetUserSchema,
   PaginatedSearchParamsSchema,
@@ -139,6 +140,40 @@ export async function getUserQuestions(
     return {
       success: true,
       data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function getUserAnswers(
+  params: GetUserAnswersParams
+): Promise<ActionResponse<{ answers: Answer[]; isNext: boolean }>> {
+  const validationResult = await action({
+    params,
+    schema: GetUserAnswersSchema,
+  });
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { page = 1, pageSize = 10, userId } = validationResult.params!;
+  const skip = (page - 1) * pageSize;
+  const limit = pageSize;
+
+  const filterQuery: FilterQuery<typeof Answer> = { author: userId };
+
+  try {
+    const totalAnswers = await Answer.countDocuments(filterQuery);
+    const answers = await Answer.find(filterQuery)
+      .populate("author", "_id name image")
+      .lean()
+      .skip(skip)
+      .limit(limit);
+    const isNext = totalAnswers > skip + answers.length;
+    return {
+      success: true,
+      data: { answers: JSON.parse(JSON.stringify(answers)), isNext },
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;

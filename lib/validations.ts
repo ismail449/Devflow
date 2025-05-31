@@ -215,3 +215,11 @@ export const GetUserQuestionsSchema = PaginatedSearchParamsSchema.omit({
 }).extend({
   userId: z.string().min(1, { message: "User id is required." }),
 });
+
+export const GetUserAnswersSchema = PaginatedSearchParamsSchema.omit({
+  filter: true,
+  query: true,
+  sort: true,
+}).extend({
+  userId: z.string().min(1, { message: "User id is required." }),
+});
