@@ -77,3 +77,7 @@ type GetUserQuestionsParams = {
 type GetUserAnswersParams = {
   userId: string;
 } & Omit<PaginatedSearchParams, "query" | "filter" | "sort">;
+
+type GetUserTopTagsParams = {
+  userId: string;
+};

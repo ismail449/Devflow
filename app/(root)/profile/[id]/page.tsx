@@ -6,6 +6,7 @@ import React from "react";
 import { auth } from "@/auth";
 import AnswerCard from "@/components/cards/AnswerCard";
 import QuestionCard from "@/components/cards/QuestionCard";
+import TagCard from "@/components/cards/TagCard";
 import DataRenderer from "@/components/DataRenderer";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
@@ -13,11 +14,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
 import Stats from "@/components/user/Stats";
 import UserAvatar from "@/components/UserAvatar";
-import { EMPTY_ANSWERS, EMPTY_QUESTION } from "@/constants/states";
+import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constants/states";
 import {
   getUser,
   getUserQuestions,
   getUserAnswers,
+  getUserTopTags,
 } from "@/lib/actions/user.action";
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
@@ -40,6 +42,11 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       error: getUserAnswersError,
       data: userAnswers,
     },
+    {
+      success: getUserTopTagsSuccess,
+      error: getUserTopTagsError,
+      data: userTopTags,
+    },
   ] = await Promise.all([
     getUser({
       userId: id,
@@ -54,6 +61,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       page: Number(page) || 1,
       pageSize: Number(pageSize) || 10,
     }),
+    getUserTopTags({ userId: id }),
   ]);
 
   if (!success) {
@@ -67,6 +75,8 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   const { questions, isNext: hasMoreQuestions } = userQuestions!;
 
   const { answers, isNext: hasMoreAnswers } = userAnswers!;
+
+  const { tags } = userTopTags!;
 
   const { _id, createdAt, name, userName, bio, image, location, portfolio } =
     user;
@@ -185,7 +195,25 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
           <h3 className="h3-bold text-dark200_light900">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
-            <p>List of Tags</p>
+            <DataRenderer
+              empty={EMPTY_TAGS}
+              success={getUserTopTagsSuccess}
+              error={getUserTopTagsError}
+              data={tags}
+              render={(tags) => (
+                <div className="mt-3 flex w-full flex-col gap-4">
+                  {tags.map((tag) => (
+                    <TagCard
+                      key={tag._id}
+                      {...tag}
+                      questions={tag.count}
+                      showCount
+                      compact
+                    />
+                  ))}
+                </div>
+              )}
+            />
           </div>
         </div>
       </section>
