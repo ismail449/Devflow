@@ -161,7 +161,13 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               render={(questions) => (
                 <div className="flex w-full flex-col gap-6">
                   {questions.map((question) => (
-                    <QuestionCard question={question} key={question._id} />
+                    <QuestionCard
+                      question={question}
+                      key={question._id}
+                      showActionBtns={
+                        loggedInUser?.user?.id === question.author._id
+                      }
+                    />
                   ))}
                 </div>
               )}
@@ -175,7 +181,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               error={getUserAnswersError}
               data={answers}
               render={(answers) => (
-                <div className="flex w-full flex-col gap-6">
+                <div className="flex w-full flex-col gap-10">
                   {answers.map((answer) => (
                     <AnswerCard
                       key={answer._id}
@@ -183,6 +189,9 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
                       content={answer.content.slice(0, 27) + "..."}
                       showReadMore={true}
                       containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
+                      showActionBtns={
+                        loggedInUser?.user?.id === answer.author._id
+                      }
                     />
                   ))}
                 </div>

@@ -6,9 +6,11 @@ import ROUTES from "@/constants/routes";
 import { getTimeStamp } from "@/lib/utils";
 
 import TagCard from "./TagCard";
+import EditDeleteActions from "../user/EditDeleteActions";
 
 type Props = {
   question: Question;
+  showActionBtns?: boolean;
 };
 
 const QuestionCard = ({
@@ -22,19 +24,25 @@ const QuestionCard = ({
     answerCount,
     views,
   },
+  showActionBtns = false,
 }: Props) => {
   const creationTimeStamp = getTimeStamp(createdAt);
   return (
     <div className="card-wrapper text-dark200_light900 background-light800_darkgradient w-full rounded-[10px] p-9 sm:px-11">
-      <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
-        {creationTimeStamp}
-      </span>
+      <div className="flex flex-col-reverse items-center justify-between gap-5 sm:flex-row">
+        <div className="flex-1">
+          <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
+            {creationTimeStamp}
+          </span>
 
-      <Link href={ROUTES.QUESTION(_id)}>
-        <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 ">
-          {title}
-        </h3>
-      </Link>
+          <Link href={ROUTES.QUESTION(_id)}>
+            <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 ">
+              {title}
+            </h3>
+          </Link>
+        </div>
+        {showActionBtns && <EditDeleteActions type="Question" itemId={_id} />}
+      </div>
 
       <div className="mt-3.5 flex w-full flex-wrap gap-2">
         {tags.map((tag: Tag) => (
