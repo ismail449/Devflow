@@ -20,8 +20,8 @@ const Collections = async ({
   const { success, data, error } = await getSavedQuestions({
     filter: filter || "",
     query: query || "",
-    page: Number(page) || 10,
-    pageSize: Number(pageSize) || 1,
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
   });
 
   const { collection: collections, isNext } = data || {};
