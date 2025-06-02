@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import ROUTES from "@/constants/routes";
 import { toast } from "@/hooks/use-toast";
+import { deleteQuestion } from "@/lib/actions/question.action";
 
 type Props = {
   type: "Question" | "Answer";
@@ -32,6 +33,15 @@ const EditDeleteActions = ({ itemId, type }: Props) => {
 
   const handleDelete = async () => {
     if (type === "Question") {
+      const { success, error } = await deleteQuestion({ itemId });
+      if (!success) {
+        return toast({
+          title: "Could not delete question",
+          description:
+            error?.message || "There was a problem with deleting your question",
+          variant: "destructive",
+        });
+      }
       toast({
         title: "Question deleted",
         description: "Your question has been deleted successfully.",
@@ -67,7 +77,6 @@ const EditDeleteActions = ({ itemId, type }: Props) => {
             width={14}
             height={14}
             className="cursor-pointer object-contain"
-            onClick={handleEdit}
           />
         </AlertDialogTrigger>
         <AlertDialogContent className="background-light800_dark300">

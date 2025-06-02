@@ -227,3 +227,7 @@ export const GetUserAnswersSchema = PaginatedSearchParamsSchema.omit({
 export const GetUserTopTagsSchema = z.object({
   userId: z.string().min(1, { message: "User id is required." }),
 });
+
+export const DeleteItemSchema = z.object({
+  itemId: z.string().min(1, { message: "Item id is required." }),
+});

@@ -81,3 +81,7 @@ type GetUserAnswersParams = {
 type GetUserTopTagsParams = {
   userId: string;
 };
+
+type DeleteItemParams = {
+  itemId: string;
+};

@@ -89,7 +89,7 @@ const AnswerForm = ({ questionId, questionContent, questionTitle }: Props) => {
         questionContent,
         userAnswer
       );
-      console.log(success, error, data);
+
       if (!success) {
         return toast({
           title: "Error",
