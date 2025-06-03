@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import ROUTES from "@/constants/routes";
 import { toast } from "@/hooks/use-toast";
+import { deleteAnswer } from "@/lib/actions/answer.action";
 import { deleteQuestion } from "@/lib/actions/question.action";
 
 type Props = {
@@ -34,6 +35,7 @@ const EditDeleteActions = ({ itemId, type }: Props) => {
   const handleDelete = async () => {
     if (type === "Question") {
       const { success, error } = await deleteQuestion({ itemId });
+
       if (!success) {
         return toast({
           title: "Could not delete question",
@@ -42,11 +44,23 @@ const EditDeleteActions = ({ itemId, type }: Props) => {
           variant: "destructive",
         });
       }
+
       toast({
         title: "Question deleted",
         description: "Your question has been deleted successfully.",
       });
     } else if (type === "Answer") {
+      const { success, error } = await deleteAnswer({ itemId });
+
+      if (!success) {
+        return toast({
+          title: "Could not delete answer",
+          description:
+            error?.message || "There was a problem with deleting your answer",
+          variant: "destructive",
+        });
+      }
+
       toast({
         title: "Answer deleted",
         description: "Your answer has been deleted successfully.",

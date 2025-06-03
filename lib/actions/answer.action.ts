@@ -4,13 +4,17 @@ import mongoose, { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 
 import ROUTES from "@/constants/routes";
-import { Answer, Question } from "@/database";
+import { Answer, Question, Vote } from "@/database";
 import { AnswerDoc } from "@/database/answer.model";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { NotFoundError } from "../http-errors";
-import { CreateAnswerSchema, GetQuestionAnswersSchema } from "../validations";
+import { NotFoundError, UnauthorizedError } from "../http-errors";
+import {
+  CreateAnswerSchema,
+  DeleteItemSchema,
+  GetQuestionAnswersSchema,
+} from "../validations";
 
 export async function createAnswer(
   params: CreateAnswerParams
@@ -131,5 +135,62 @@ export async function getQuestionAnswers(
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
+  }
+}
+
+export async function deleteAnswer(
+  params: DeleteItemParams
+): Promise<ActionResponse> {
+  const validationResult = await action({
+    authorize: true,
+    params,
+    schema: DeleteItemSchema,
+  });
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { itemId } = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const answer = await Answer.findById(itemId).session(session);
+
+    if (!answer) {
+      throw new NotFoundError("Answer");
+    }
+
+    if (answer.author.toString() !== userId) {
+      throw new UnauthorizedError(
+        "You are not authorized to delete this Answer"
+      );
+    }
+
+    await Vote.deleteMany({
+      actionType: "answer",
+      actionId: itemId,
+    }).session(session);
+
+    await Question.findByIdAndUpdate(
+      answer.questionId,
+      {
+        $inc: { answerCount: -1 },
+      },
+      { session, new: true }
+    );
+
+    await Answer.findByIdAndDelete(itemId).session(session);
+
+    await session.commitTransaction();
+    revalidatePath(ROUTES.PROFILE(userId || ""));
+    return { success: true };
+  } catch (error) {
+    await session.abortTransaction();
+    return handleError(error) as ErrorResponse;
+  } finally {
+    await session.endSession();
   }
 }
