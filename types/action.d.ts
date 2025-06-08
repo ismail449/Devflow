@@ -85,3 +85,25 @@ type GetUserTopTagsParams = {
 type DeleteItemParams = {
   itemId: string;
 };
+
+type CreateInteractionParams = {
+  actionId: string;
+  actionType: "question" | "answer";
+  action:
+    | "view"
+    | "upvote"
+    | "downvote"
+    | "bookmark"
+    | "post"
+    | "edit"
+    | "delete"
+    | "search";
+  authorId: string;
+};
+
+interface UpdateReputationParams {
+  interaction: InteractionDoc;
+  session: mongoose.ClientSession;
+  performerId: string;
+  authorId: string;
+}
