@@ -1,18 +1,20 @@
 "use server";
 import mongoose, { ClientSession } from "mongoose";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 import ROUTES from "@/constants/routes";
 import { Answer, Question, Vote } from "@/database";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { UnauthorizedError } from "../http-errors";
+import { NotFoundError, UnauthorizedError } from "../http-errors";
 import {
   CreateVoteSchema,
   HasVotedSchema,
   UpdateVoteCountSchema,
 } from "../validations";
+import { createInteraction } from "./interaction.action";
 
 export async function updateVoteCount(
   params: UpdateVoteCountParams,
@@ -124,6 +126,23 @@ export async function createVote(
         session
       );
     }
+
+    const Model = targetType === "answer" ? Answer : Question;
+    const targetDoc = await Model.findById(targetId);
+
+    if (!targetDoc) throw new NotFoundError("Target");
+
+    const targetAuthorId = targetDoc.author.toString();
+
+    after(async () => {
+      await createInteraction({
+        action: voteType,
+        actionType: targetType,
+        actionId: targetId,
+        authorId: targetAuthorId,
+      });
+    });
+
     await session.commitTransaction();
     revalidatePath(ROUTES.QUESTION(targetId));
     return { success: true };
