@@ -20,6 +20,7 @@ import {
   getUserQuestions,
   getUserAnswers,
   getUserTopTags,
+  getUserStats,
 } from "@/lib/actions/user.action";
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
@@ -47,6 +48,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       error: getUserTopTagsError,
       data: userTopTags,
     },
+    { data: userStats },
   ] = await Promise.all([
     getUser({
       userId: id,
@@ -62,6 +64,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       pageSize: Number(pageSize) || 10,
     }),
     getUserTopTags({ userId: id }),
+    getUserStats({ userId: id }),
   ]);
 
   if (!success) {
@@ -70,7 +73,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
     );
   }
 
-  const { totalAnswers, totalQuestions, user } = data!;
+  const { user } = data!;
 
   const { questions, isNext: hasMoreQuestions } = userQuestions!;
 
@@ -131,13 +134,15 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         </div>
       </section>
       <Stats
-        totalQuestions={totalQuestions}
-        totalAnswers={totalAnswers}
-        badges={{
-          GOLD: 0,
-          SILVER: 0,
-          BRONZE: 0,
-        }}
+        totalQuestions={userStats?.totalQuestions || 0}
+        totalAnswers={userStats?.totalAnswers || 0}
+        badges={
+          userStats?.badges || {
+            GOLD: 0,
+            SILVER: 0,
+            BRONZE: 0,
+          }
+        }
         reputationPoints={user.reputation || 0}
       />
       <section className="mt-10 flex gap-10">

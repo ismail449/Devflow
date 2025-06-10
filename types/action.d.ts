@@ -107,3 +107,7 @@ interface UpdateReputationParams {
   performerId: string;
   authorId: string;
 }
+
+type GetUserStatsParams = {
+  userId: string;
+};

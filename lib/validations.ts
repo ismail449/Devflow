@@ -240,3 +240,7 @@ export const CreateInteractionSchema = z.object({
   action: z.enum(InteractionActionEnums),
   authorId: z.string().min(1),
 });
+
+export const GetUserStatsSchema = z.object({
+  userId: z.string().min(1, { message: "User id is required." }),
+});
