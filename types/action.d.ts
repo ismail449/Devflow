@@ -111,3 +111,10 @@ interface UpdateReputationParams {
 type GetUserStatsParams = {
   userId: string;
 };
+
+interface RecommendationParams {
+  userId: string;
+  query?: string;
+  skip: number;
+  limit: number;
+}
