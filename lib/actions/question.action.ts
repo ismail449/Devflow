@@ -2,6 +2,7 @@
 import mongoose, { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 import { after } from "next/server";
+import { cache } from "react";
 
 import { auth } from "@/auth";
 import ROUTES from "@/constants/routes";
@@ -205,7 +206,7 @@ export async function editQuestion(
   }
 }
 
-export async function getQuestion(
+export const getQuestion = cache(async function getQuestion(
   params: GetQuestionParams
 ): Promise<ActionResponse<Question>> {
   const validationResult = await action({
@@ -238,7 +239,7 @@ export async function getQuestion(
   } finally {
     await session.endSession();
   }
-}
+});
 
 export async function getQuestions(
   params: PaginatedSearchParams
