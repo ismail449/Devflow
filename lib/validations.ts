@@ -244,3 +244,15 @@ export const CreateInteractionSchema = z.object({
 export const GetUserStatsSchema = z.object({
   userId: z.string().min(1, { message: "User id is required." }),
 });
+
+export const GetJobsParamsSchema = PaginatedSearchParamsSchema.extend({
+  country: z
+    .string()
+    .min(2, { message: "Country code should be two characters" })
+    .max(2, { message: "Country code should be two characters" })
+    .optional(),
+  numberOfPages: z
+    .number()
+    .min(1, { message: "Number of pages should not be less than 1" })
+    .optional(),
+});

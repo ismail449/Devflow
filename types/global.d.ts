@@ -91,3 +91,18 @@ type BadgeCounts = {
   SILVER: number;
   BRONZE: number;
 };
+
+type Job = {
+  job_title: string;
+  job_employment_type_text: string;
+  job_description: string;
+  job_apply_link: string;
+  employer_logo?: string;
+  job_salary_currency?: string;
+  job_salary?: string;
+  job_min_salary?: string;
+  job_max_salary?: string;
+  job_city?: string;
+  job_state?: string;
+  job_country?: string;
+};

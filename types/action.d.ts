@@ -118,3 +118,8 @@ interface RecommendationParams {
   skip: number;
   limit: number;
 }
+
+type GetJobsParams = PaginatedSearchParams & {
+  country?: string;
+  numberOfPages?: number;
+};
