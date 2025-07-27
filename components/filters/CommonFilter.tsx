@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   filters: { name: string; value: string }[];
+  defaultValue?: string;
   otherClasses?: string;
   containerClasses?: string;
 };
@@ -23,6 +24,7 @@ const CommonFilter = ({
   filters,
   otherClasses = "",
   containerClasses = "",
+  defaultValue,
 }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,7 +45,7 @@ const CommonFilter = ({
     <div className={cn("relative", containerClasses)}>
       <Select
         onValueChange={handleUpdateParams}
-        defaultValue={paramsFilter || undefined}
+        defaultValue={paramsFilter || defaultValue || undefined}
       >
         <SelectTrigger
           className={cn(
