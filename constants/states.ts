@@ -62,3 +62,8 @@ export const EMPTY_USERS = {
     href: ROUTES.COLLECTION,
   },
 };
+
+export const EMPTY_JOBS = {
+  title: "No Jobs Found",
+  message: "The question board is empty.",
+};

@@ -7,6 +7,8 @@ import { fetchHandler } from "./handlers/fetch";
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000/api";
 
+const COUNTRIES_API_BASE_URL = process.env.COUNTRIES_API_BASE_URL || "";
+
 export const api = {
   auth: {
     signInWithOAuth: async (data: SignInWithOAuthParams) =>
@@ -82,5 +84,38 @@ export const api = {
         method: "POST",
         timeout: 100000,
       }),
+  },
+
+  jobs: {
+    getJobs: async <T = { jobs: Job[]; isNext: boolean }>(
+      data: GetJobsParams
+    ): Promise<ActionResponse<T>> => {
+      return fetchHandler<T>(
+        `${BASE_URL}/job/get-jobs/?query=${data.query}&page=${data.page}&pageSize=${data.numberOfPages}&country=${data.country}`
+      );
+    },
+  },
+
+  countries: {
+    getCountryDataUsingCode: async (code: string = "us") => {
+      const response = await fetch(
+        `${COUNTRIES_API_BASE_URL}/alpha?codes=${code}`
+      );
+      return await response.json();
+    },
+
+    getCountriesNames: async (): Promise<Country[]> => {
+      const response = await fetch(
+        `${COUNTRIES_API_BASE_URL}/all?fields=cca2,name`
+      );
+      return await response.json();
+    },
+  },
+
+  ip: {
+    getCurrentUserCountry: async () => {
+      const response = await fetch(`http://ip-api.com/json/`);
+      return await response.json();
+    },
   },
 };

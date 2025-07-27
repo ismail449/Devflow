@@ -93,8 +93,10 @@ type BadgeCounts = {
 };
 
 type Job = {
+  job_id: string;
   job_title: string;
-  job_employment_type_text: string;
+  job_employment_type: string;
+  job_employment_type_text?: string;
   job_description: string;
   job_apply_link: string;
   employer_logo?: string;
@@ -105,4 +107,13 @@ type Job = {
   job_city?: string;
   job_state?: string;
   job_country?: string;
+  job_location?: string;
+};
+
+type Country = {
+  name: {
+    common: string;
+    official: string;
+  };
+  cca2: string;
 };

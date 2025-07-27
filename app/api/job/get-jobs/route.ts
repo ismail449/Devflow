@@ -41,7 +41,10 @@ export async function GET(request: NextRequest) {
     const jobs = await response.json();
 
     return NextResponse.json(
-      { success: true, data: { jobs: jobs.data, isNext: true } },
+      {
+        success: true,
+        data: { jobs: jobs.data, isNext: jobs.data && jobs.data.length },
+      },
       { status: 200 }
     );
   } catch (error) {
