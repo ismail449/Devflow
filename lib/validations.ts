@@ -256,3 +256,10 @@ export const GetJobsParamsSchema = PaginatedSearchParamsSchema.extend({
     .min(1, { message: "Number of pages should not be less than 1" })
     .optional(),
 });
+
+export const GlobalSearchSchema = z.object({
+  query: z.string().min(1, { message: "The search query is required" }),
+  searchTypes: z
+    .array(z.enum(["Question", "Answer", "User", "Tag"]))
+    .optional(),
+});

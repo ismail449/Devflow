@@ -123,3 +123,9 @@ type GetJobsParams = PaginatedSearchParams & {
   country?: string;
   numberOfPages?: number;
 };
+type GlobalSearchTypes = "Question" | "Answer" | "User" | "Tag";
+
+type GlobalSearchParams = {
+  query: string;
+  searchTypes?: GlobalSearchTypes[];
+};
